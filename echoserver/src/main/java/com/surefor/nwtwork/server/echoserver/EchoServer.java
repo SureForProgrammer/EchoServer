@@ -13,9 +13,19 @@ import org.apache.log4j.Logger;
  */
 public class EchoServer {
     private Integer port = 12334 ;
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
     public static final String OPTION_PORT = "port" ;
-    public final static Logger logger = Logger.getLogger(EchoServer.class);
-    public final static String PROPERTIES = "server.properties" ;
+    public static final Logger logger = Logger.getLogger(EchoServer.class);
+    public static final Integer DEFAULT_ECHO_LISTENING_PORT = 7 ;
+
     public static void main(String[] args) throws ParseException {
         Options options = new Options();
         options.addOption(EchoServer.OPTION_PORT, true, "listening port number.");
@@ -26,22 +36,15 @@ public class EchoServer {
         CommandLine cmd = parser.parse(options, args);
 
         if(cmd.hasOption(EchoServer.OPTION_PORT)) {
-            String port = cmd.getOptionValue(EchoServer.OPTION_PORT) ;
-            logger.info(port);
+            echoServer.setPort(Integer.valueOf(cmd.getOptionValue(EchoServer.OPTION_PORT))) ;
         } else {
-            Properties properties = Properties.instance() ;
             try {
-                properties.loadProperties(PROPERTIES);
-                int port = Integer.valueOf(properties.get(PROPERTIES, "server.port")) ;
-            } catch (ProperitesExistException e) {
-                e.printStackTrace();
+                echoServer.setPort(ServerConfig.getPort()) ;
             } catch (ConfigurationException e) {
-                e.printStackTrace();
-            } catch (ConfigNotFondException e) {
-                e.printStackTrace();
-            } catch (ProperitesNotFondException e) {
-                e.printStackTrace();
+                echoServer.setPort(DEFAULT_ECHO_LISTENING_PORT) ;
             }
         }
+
+        logger.debug(echoServer.getPort());
     }
 }
