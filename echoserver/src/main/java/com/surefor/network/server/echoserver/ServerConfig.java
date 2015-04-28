@@ -1,4 +1,4 @@
-package com.surefor.nwtwork.server.echoserver;
+package com.surefor.network.server.echoserver;
 
 import com.surefor.utils.properties.ConfigNotFondException;
 import com.surefor.utils.properties.ProperitesExistException;
